@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets
+    xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Adds Photo Util for getting blobs from storage</Title>
+            <Shortcut>SSPhotoUtils</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CSharp">
+                <![CDATA[
+                 private readonly string _filename;
+        public const string BaseUri = "https://elastastorage.blob.core.windows.net/eventphotos/";
+
+        public PhotoBlobUtils(string filename)
+        {
+            _filename = filename;
+        }
+
+        public ImageSource GetPhotoImage()
+        {
+            string filePath = null;
+            ImageSource sauce;
+            filePath = !_filename.Contains(BaseUri) ? String.Concat(BaseUri, _filename) :_filename;
+
+            try
+            {
+                sauce = new BitmapImage(new Uri(filePath));
+            }
+            catch(Exception ex)
+            {
+                throw new FileNotFoundException(ex.Message);
+            }
+
+            return sauce;
+        }
+        ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

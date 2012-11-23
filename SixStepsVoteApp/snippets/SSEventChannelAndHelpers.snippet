@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets
+    xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Insert a new channel and some helper method</Title>
+            <Shortcut>SSEventChannelandHelpers</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CSharp">
+                <![CDATA[
+               #region Helpers
+
+        private void ShowDialog(string text)
+        {
+            var dialog = new Windows.UI.Popups.MessageDialog(text);
+            dialog.ShowAsync();
+        }
+
+        private async static void SetChannel()
+        {
+            var pushNotifier = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+
+            var token = HardwareIdentification.GetPackageSpecificToken(null);
+            // get this for the specific hardware to id the device being used
+            string installationId = CryptographicBuffer.EncodeToBase64String(token.Id);
+
+            var channel = new JsonObject
+                         {
+                             {"ChannelUri", JsonValue.CreateStringValue(pushNotifier.Uri)},
+                             {"InstallationId", JsonValue.CreateStringValue(installationId)}
+                         };
+
+            await App.MobileService.GetTable("Channels").InsertAsync(channel);
+        }
+
+        public void RefreshView(object sender, RoutedEventArgs e)
+        {
+            EventListScroller.ItemsSource = Speakers;
+        }
+
+        #endregion
+        ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

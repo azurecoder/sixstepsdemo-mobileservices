@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets
+    xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Authentication module</Title>
+            <Shortcut>SSEventAuth</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CSharp">
+                <![CDATA[
+                 #region Twitter/Microsoft Account Login
+
+        public void LoginTwitter(object sender, RoutedEventArgs e)
+        {
+            LoginForm(MobileServiceAuthenticationProvider.Twitter);
+        }
+
+        public void LoginMicrosoftAccount(object sender, RoutedEventArgs e)
+        {
+            LoginForm(MobileServiceAuthenticationProvider.MicrosoftAccount);
+        }
+
+        private async void LoginForm(MobileServiceAuthenticationProvider provider)
+        {
+            if(App.MobileService.CurrentUser != null)
+            {
+                App.MobileService.Logout();
+            }
+            try
+            {
+                await App.MobileService.LoginAsync(provider);
+                SetChannel();
+            }
+            catch (Exception exception)
+            {
+                ShowDialog(exception.ToString());
+            }
+        }
+
+        #endregion
+        ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets
+    xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Adds the speaker form to the Win 8 app</Title>
+            <Shortcut>SSEventSpeakerForm</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CSharp">
+                <![CDATA[
+                 #region New Speaker Insert
+
+        private void SendNewSpeaker(object sender, RoutedEventArgs e)
+        {
+            DateTime speakerDate;
+            if(!DateTime.TryParse(SpeakerDateTime.Text, out speakerDate))
+            {
+                ShowDialog("Date is not in the correct format. Please adjust and send form data again");
+                return;
+            }
+
+            var speakers = new SpeakerSampleData();
+            var speaker = new Speaker
+                              {
+                                  Name = SpeakerName.Text,
+                                  Info = SpeakerInfo.Text,
+                                  TalkTitle = SpeakerTalkTitle.Text,
+                                  TalkDescription = SpeakerTalkDescription.Text,
+                                  PictureUrl = Path.Combine(PhotoBlobUtils.BaseUri,SpeakerPictureUrl.Text),
+                                  TalkDate = speakerDate
+                              };
+            speakers.InsertSpeaker(speaker);
+            AddSpeakerForm.IsOpen = false;
+            EventListScroller.ItemsSource = Speakers;
+            //UpdateBadge(Speakers.Count);
+        }
+
+        private void OpenAddSpeakerForm(object sender, RoutedEventArgs e)
+        {
+            if (App.MobileService.CurrentUser == null)
+            {
+                ShowDialog("Please login before inserting into the database");
+                return;
+            }
+
+            AddSpeakerForm.IsOpen = true;
+        }
+
+        private void CloseSpeakerForm(object sender, RoutedEventArgs e)
+        {
+            AddSpeakerForm.IsOpen = false;
+        }
+
+        #endregion
+        ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>
